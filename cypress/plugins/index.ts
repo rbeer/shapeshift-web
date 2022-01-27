@@ -12,11 +12,45 @@
 // This function is called when a project is opened or re-opened (e.g. due to
 // the project's config changing)
 
+const { spawnSync } = require('child_process');
+const { resolve } = require('path')
+
+const findBrave = async () => {
+  const versionScript = resolve(process.cwd(), 'cypress/scripts/brave-version.sh')
+  const versionProc = await spawnSync(versionScript)
+  if (versionProc.status !== 0) {
+    throw new ReferenceError('Brave not found')
+  } else {
+    return versionProc.stdout.toString().split('\n')
+  }
+}
+
 /**
  * @type {Cypress.PluginConfig}
  */
 // eslint-disable-next-line no-unused-vars
-module.exports = (on: any, config: any) => {
+module.exports = async (on: any, config: any) => {
   // `on` is used to hook into various events Cypress emits
   // `config` is the resolved Cypress config
+
+  const browsers = [...config.browsers]
+
+  try {
+    const [path, version] = await findBrave()
+    const majorVersion = parseInt(version.split('.'))
+
+    browsers.push({
+      name: 'brave',
+      channel: 'stable',
+      family: 'chromium',
+      displayName: 'Brave',
+      version,
+      path,
+      majorVersion
+    })
+  } catch (err) {}
+
+  return {
+    browsers
+  }
 }
