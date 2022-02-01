@@ -4,6 +4,7 @@ import { Asset } from '@shapeshiftoss/types'
 import { FormEvent, useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useSelector } from 'react-redux'
+import { isMobile } from 'react-device-detect'
 import { selectAssetsByMarketCap } from 'state/slices/assetsSlice/assetsSlice'
 
 import { AssetList } from './AssetList'
@@ -12,9 +13,10 @@ import { filterAssetsBySearchTerm } from './helpers/filterAssetsBySearchTerm/fil
 type AssetSearchProps = {
   onClick: (asset: any) => void
   filterBy?: (asset: Asset[]) => Asset[]
+  autoFocusInput?: boolean
 }
 
-export const AssetSearch = ({ onClick, filterBy }: AssetSearchProps) => {
+export const AssetSearch = ({ onClick, filterBy, autoFocusInput = false }: AssetSearchProps) => {
   const assets = useSelector(selectAssetsByMarketCap)
   const currentAssets = useMemo(() => (filterBy ? filterBy(assets) : assets), [assets, filterBy])
   const [filteredAssets, setFilteredAssets] = useState<Asset[]>([])
@@ -53,6 +55,7 @@ export const AssetSearch = ({ onClick, filterBy }: AssetSearchProps) => {
             placeholder='Search'
             pl={10}
             variant='filled'
+            autoFocus={autoFocusInput && !isMobile}
           />
         </InputGroup>
       </Box>

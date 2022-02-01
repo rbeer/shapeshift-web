@@ -34,7 +34,7 @@ export const SelectAsset = ({ onClick, history }: SelectAssetProps) => {
           </WithBackButton>
         </Card.Header>
         <Card.Body p={0} height='400px' display='flex' flexDir='column'>
-          <AssetSearch onClick={onClick} filterBy={filterByCaip19} />
+          <AssetSearch onClick={onClick} filterBy={filterByCaip19} autoFocusInput={true} />
         </Card.Body>
       </Card>
     </SlideTransition>

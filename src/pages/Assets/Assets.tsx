@@ -21,7 +21,7 @@ export const Assets = () => {
         height={{ base: 'calc(100vh - 128px)', md: 'calc(100vh - 64px)' }}
         px={4}
       >
-        <AssetSearch onClick={onClick} />
+        <AssetSearch onClick={onClick} autoFocusInput={true} />
       </Flex>
     </Page>
   )
